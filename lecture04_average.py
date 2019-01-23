@@ -5,7 +5,7 @@ import sys
 import scipy
 from skimage import io,util,color
 
-image = util.img_as_float(color.rgb2gray(io.imread(sys.argv[1])))
+image = util.img_as_float64(color.rgb2gray(io.imread(sys.argv[1])))
 
 size = int(sys.argv[2])
 if (size%2==0):
@@ -19,3 +19,5 @@ filt = filt / size**2
 print(filt)
 
 out = scipy.ndimage.filters.convolve(image, filt, mode="constant", cval=0)
+
+io.imsave(sys.argv[3], numpy.clip(out, 0, 1))
