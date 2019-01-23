@@ -7,14 +7,10 @@ from skimage import io,util,color
 
 image = util.img_as_float64(color.rgb2gray(io.imread(sys.argv[1])))
 
-size = int(sys.argv[2])
-if (size%2==0):
-  print("Wrong size")
-  sys.exit()
+size = 3
 
-filt = numpy.ones((size, size))
-#filt = filt / numpy.sum(filt)
-filt = filt / size**2 
+filt = numpy.ndarray([[1,2,1],[2,4,2],[1,2,1]], dtype=numpy.float)
+filt = filt / numpy.sum(filt) 
 
 print(filt)
 
