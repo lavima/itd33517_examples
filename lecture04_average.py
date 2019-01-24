@@ -4,6 +4,7 @@ import numpy
 import sys
 import scipy
 from skimage import io,util,color
+from scipy import ndimage
 
 image = util.img_as_float64(color.rgb2gray(io.imread(sys.argv[1])))
 
