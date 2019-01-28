@@ -25,7 +25,7 @@ filt = filt / size**2
 print(filt)
 
 # Perform the smoothing 
-out = scipy.ndimage.convolve(image, filt, mode="constant", cval=0)
+out = ndimage.convolve(image, filt, mode="constant", cval=0)
 
 # Save the result
 io.imsave(sys.argv[3], numpy.clip(out, 0, 1))
