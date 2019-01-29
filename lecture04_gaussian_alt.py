@@ -9,11 +9,11 @@ from scipy import ndimage
 # Read in image and convert to appropriate format
 image = util.img_as_float(color.rgb2gray(io.imread(sys.argv[1])))
 
-# Read in the size of the mask to use, and make sure it is an odd number
-size = int(sys.argv[2])
-if (size%2==0):
-  print("Wrong size")
-  sys.exit()
+# Read in sigma 
+sigma = float(sys.argv[2])
+
+# Calculate size of filter mask
+size = int(6*sigma)-1
 
 # A function for converting top-left aligned coordinates to center aligned 
 # coordinates
@@ -25,12 +25,6 @@ def dist(i,j):
 
 # A function for creating a Gaussian smoothing filter
 def gaussian():
-  # Find the sigma to use based on the size of the filter. The sigma controls 
-  # the magnitude of the values in the generated filter. The relationship 
-  # between size and sigma make sure that we don't clip the lower values of the
-  # bell curve.
-  sigma = (size+1)/6
-  
   # Create the filter image
   mask = numpy.ndarray((size,size), dtype=numpy.float) 
 
