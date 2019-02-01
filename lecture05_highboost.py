@@ -9,9 +9,15 @@ from scipy import ndimage
 # Read in image and convert to appropriate format
 image = util.img_as_float(color.rgb2gray(io.imread(sys.argv[1])))
 
+# Read the sigma to use in the gaussian noise reduction filter from the second 
+# command line argument
 sigma = float(sys.argv[2])
 
+# Read in the boos factor k (see lecture notes or book)
 k = float(sys.argv[3])
+
+# The following is a direct copy from the gaussian noise reduction code in
+# lecture04_guassian_alt.py
 
 # Calculate size of filter mask
 size = int(6*sigma)-1
@@ -49,8 +55,15 @@ filt = gaussian()
 # Smooth the image using built-in convolution operator and our filter
 smooth = ndimage.convolve(image, filt, mode="nearest")
 
+# End of copy / Start of highboost filtering
+
+# Find the highboost_mask. Note that in this case, the term mask does not refer
+# to a filter mask, but a highboost mask. The highboost mask has the same size
+# as the image
 highboost_mask = image - smooth
 
+# Perform the highboost filtering
 highboost = image + k*highboost_mask
 
+# Save te clipped result
 io.imsave(sys.argv[4], numpy.clip(highboost,0,1)) 
