@@ -25,6 +25,14 @@ accum[0,0] = prob[0,0]
 for i in range(1,256):
   accum[i,0] = accum[i-1,0]+prob[i,0] 
 
+# Create an histogram to store the accumulated probabilities
+spec_accum = numpy.zeros(prob.shape)
+spec_accum[0,0] = spec_prob[0,0]
+for i in range(1,256):
+  spec_accum[i,0] = spec_accum[i-1,0]+spec_prob[i,0] 
+
+spec_map = numpy.ubyte(255*spec_accum)
+
 # Create the output image. Note that we are using unsigned bytes to make sure
 # that the intensities are discrete.
 out = numpy.zeros(image.shape, dtype=numpy.ubyte)
