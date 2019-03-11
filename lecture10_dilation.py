@@ -29,10 +29,11 @@ for i in range(image.shape[0]):
   for j in range(image.shape[1]):
     # Retrieve subimage from padded image (not index-aligned with the image)
     subimage = padded[i:i+se_height,j:j+se_width]
-    # Determine whether or not we have an overlap at the current position
-    # We use numpy.array_equal to determine if product of the se and the subimage
-    # is the same as the se
-    out[i,j] = numpy.array_equal(subimage*se,se)
+
+    # Add code to rotate the SE
+
+    # Determine whether we have an overlap
+    out[i,j] = numpy.sum(subimage*se)>0
 
 # Save output image
 io.imsave(sys.argv[3],util.img_as_ubyte(out))
