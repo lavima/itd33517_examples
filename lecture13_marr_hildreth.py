@@ -45,13 +45,27 @@ def gaussian():
 # Create the Gaussian filter
 gaussian_filter = gaussian()
 
+# Convolve with gaussian filter to remove noise
 smooth = ndimage.convolve(image, gaussian_filter, mode="nearest")
 
+# Create and convolve with laplacian filter to remove noise
 laplacian_filter = numpy.asarray([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]])
 
 laplacian = ndimage.convolve(smooth, laplacian_filter, mode="nearest")
 
+zero_crossed = numpy.zeros(image.shape,dtype=numpy.float)
 height, width = image.shape
 for i in range(1,height-1):
   for j in range(1,width-1):
-    subimage = image[i-1:i+2,j-1:j+2]  
+    subimage = laplacian[i-1:i+2,j-1:j+2]  
+    if subimage[0,0]*subimage[2,2]<0:
+      zero_crossed[i,j] = abs(subimage[0,0]-subimage[2,2])
+    elif subimage[0,1]*subimage[2,1]<0:
+      zero_crossed[i,j] = abs(subimage[0,1]-subimage[2,1])
+    elif subimage[0,2]*subimage[2,0]<0:
+      zero_crossed[i,j] = abs(subimage[0,2]-subimage[2,0])
+    elif subimage[1,0]*subimage[1,2]<0:
+      zero_crossed[i,j] = abs(subimage[1,0]-subimage[1,2])
+
+out = zero_crossed > float(sys.argv[3])
+io.imsave(sys.argv[4], util.img_as_ubyte(out))
